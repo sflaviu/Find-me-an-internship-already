@@ -26,7 +26,7 @@ class DBConnection:
     def __init__(self):
         self.host = "localhost"
         self.user = "root"
-        self.password = "calculatoare"
+        self.password = "10lase"
         self.dbName = "internship"
         self.connection = None
         self.cursor = None
