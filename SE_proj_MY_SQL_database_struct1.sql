@@ -1,28 +1,28 @@
 
 CREATE TABLE Company (
                 Company_ID INT AUTO_INCREMENT NOT NULL,
-                Name VARCHAR NOT NULL,
+                Name VARCHAR(100) NOT NULL,
                 PRIMARY KEY (Company_ID)
 );
 
 
 CREATE TABLE Location (
                 Location_ID INT AUTO_INCREMENT NOT NULL,
-                City VARCHAR NOT NULL,
+                City VARCHAR(100) NOT NULL,
                 PRIMARY KEY (Location_ID)
 );
 
 
 CREATE TABLE Language (
                 Language_ID INT NOT NULL,
-                Name VARCHAR NOT NULL,
+                Name VARCHAR(100) NOT NULL,
                 PRIMARY KEY (Language_ID)
 );
 
 
 CREATE TABLE Internship (
                 Internship_ID INT AUTO_INCREMENT NOT NULL,
-                Descripition VARCHAR,
+                Descripition VARCHAR(1000),
                 Company_ID INT NOT NULL,
                 Location_ID INT NOT NULL,
                 Language_ID INT NOT NULL,
@@ -34,9 +34,9 @@ CREATE TABLE Internship (
 
 CREATE TABLE Client (
                 Client_ID INT AUTO_INCREMENT NOT NULL,
-                Username VARCHAR NOT NULL,
-                Password_encr VARCHAR NOT NULL,
-                Password_salt VARCHAR NOT NULL,
+                Username VARCHAR(100) NOT NULL,
+                Password_encr VARCHAR(100) NOT NULL,
+                Password_salt VARCHAR(100) NOT NULL,
                 Experience INT NOT NULL,
                 Duration INT NOT NULL,
                 PRIMARY KEY (Client_ID)
