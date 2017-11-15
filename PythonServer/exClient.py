@@ -4,7 +4,7 @@ import sys
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-server_address = ('192.168.43.112', 1234)
+server_address = ('10.142.0.2', 1234)
 print("connecting to %s port %d" %server_address)
 sock.connect(server_address)
 
