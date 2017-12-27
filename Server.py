@@ -4,32 +4,38 @@ import socket
 import thread
 from DBConnection27 import Internship
 from DBConnection27 import Client
+from rpyc.utils.server import ThreadedServer
 
 class MiddleServer(rpyc.Service):
 
-    def __init__(self, dbHost, dbPort, crowdsHost, crowdsPort):
+    def myInit(self, myHost, myPort, dbHost, dbPort, crowdsHost, crowdsPort):
         self.connections = 0
-        self.host = socket.gethostname()
-        self.port = self.generatePort();
+        self.host = myHost
+        self.port = myPort
+        #ph = PortHandler(self.host, self.port)
+        #ph.start()
         self.threadLock = thread.allocate_lock()
-        self.db = rpyc.connect(dbHost, dbPort)
-        self.crowds = rpyc.connect(crowdsHost, crowdsPort)
+        self.db = rpyc.connect(dbHost, dbPort, config={"allow_all_attrs":True})
+        self.crowds = rpyc.connect(crowdsHost, crowdsPort, config={"allow_all_attrs":True})
         self.crowds.add_port(self.port)
         self.crowds.close()
 
+    #ensure stable matching
     def on_connect(self):
         self.connections = self.connections + 1
 
     def on_disconnect(self):
         self.connections = self.connections - 1
 
+    #IPv4 when working with sockes, not suitable for rpyc
     def generatePort(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        host = socket.gethostname()
+        host = self.host
         port = 1024
-        for attempt in xrange(1024,4000,1):
-            result = s.connect((host, attempt))
-            if result == 0 :
+        for attempt in range(1024,4000,1):
+            try:
+                result = s.connect((host, attempt))
+            except Exception:
                 port = attempt
                 break
         return port
@@ -68,6 +74,21 @@ class MiddleServer(rpyc.Service):
                     internship = i
             return internship
 
+    #only for testing reasons
+    def sayHello(self):
+        print ("hello, i've connected on port " + str(self.exposed_getPort()))
 
-if __name__ == "main":
-    md = MiddleServer(sys.argv[0], sys.argv[1], sys.argv[2], sys.argv[3])
+    #only for testing reasons
+    def wait(self):
+        while(True):
+            pass
+
+
+def main():
+    md = MiddleServer();
+    md = md.myInit(sys.argv[0], sys.argv[1], sys.argv[2], sys.argv[3],sys.argv[4], sys.argv[5])
+    ThreadedServer(md, port=1234,
+                   protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
+
+if __name__ == "__main__":
+    main()
