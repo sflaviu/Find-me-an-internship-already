@@ -6,31 +6,35 @@ from DBConnection27 import Internship
 from DBConnection27 import Client
 from rpyc.utils.server import ThreadedServer
 
-class MiddleServer(rpyc.Service):
+data = None
 
-    def myInit(self, myHost, myPort, dbHost, dbPort, crowdsHost, crowdsPort):
-        self.connections = 0
+class PersistentData:
+    def __init__(self, myHost, myPort, dbHost, dbPort, crowdsHost, crowdsPort):
         self.host = myHost
         self.port = myPort
-        #ph = PortHandler(self.host, self.port)
-        #ph.start()
         self.threadLock = thread.allocate_lock()
-        self.db = rpyc.connect(dbHost, dbPort, config={"allow_all_attrs":True})
-        self.crowds = rpyc.connect(crowdsHost, crowdsPort, config={"allow_all_attrs":True})
-        self.crowds.add_port(self.port)
-        self.crowds.close()
+        self.dbPort = dbPort
+        self.dbHost = dbHost
+        #self.db = rpyc.connect(dbHost, dbPort, config={"allow_all_attrs": True})
+        #self.crowds = rpyc.connect(crowdsHost, crowdsPort, config={"allow_all_attrs": True})
+        #self.crowds.add_port(self.port)
+        #self.crowds.close()
+
+class MiddleServer(rpyc.Service):
+    connections = 0
 
     #ensure stable matching
     def on_connect(self):
-        self.connections = self.connections + 1
+        MiddleServer.connections = MiddleServer.connections + 1
 
     def on_disconnect(self):
-        self.connections = self.connections - 1
+        MiddleServer.connections = MiddleServer.connections - 1
 
     #IPv4 when working with sockes, not suitable for rpyc
     def generatePort(self):
+        global data
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        host = self.host
+        host = data.host
         port = 1024
         for attempt in range(1024,4000,1):
             try:
@@ -41,18 +45,23 @@ class MiddleServer(rpyc.Service):
         return port
 
     def exposed_connectionAllowed(self):
-        with self.threadLock:
-            if self.connections > 1:
+        global data
+        with data.threadLock:
+            if data.connections > 1:
                 return False
             return True
 
     def exposed_getPort(self):
-        return self.port
+        global data
+        return data.port
 
     def exposed_findMeAnInternshipAlready(self, client):
-        with self.threadLock:
+        global data
+        with data.threadLock:
             internship = None
-            internships = self.db.getInternships();
+            connection = rpyc.connect(data.dbHost, data.dbPort, config={"allow_all_attrs":True})
+            db = connection.root.DBConnection()
+            internships = db.getInternships();
             bestMatch = 0
             for i in internships:
                 match = 0;
@@ -72,6 +81,7 @@ class MiddleServer(rpyc.Service):
                 if match > bestMatch:
                     bestMatch = match
                     internship = i
+            connection.close()
             return internship
 
     #only for testing reasons
@@ -83,11 +93,10 @@ class MiddleServer(rpyc.Service):
         while(True):
             pass
 
-
 def main():
-    md = MiddleServer();
-    md = md.myInit(sys.argv[0], sys.argv[1], sys.argv[2], sys.argv[3],sys.argv[4], sys.argv[5])
-    ThreadedServer(md, port=1234,
+    global data
+    data = PersistentData(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],sys.argv[5], sys.argv[6])
+    ThreadedServer(MiddleServer, port = sys.argv[2],
                    protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
 if __name__ == "__main__":
