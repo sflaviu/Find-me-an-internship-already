@@ -18,8 +18,10 @@ class CrowdsMaster(rpyc.Service):
         self.clients.remove((ip, port))
 
     def start_matching(self):
+        ports = 1024
         for i in self.clients:
-            subprocess.call(["python", "Server.py " + str(ip1) + " " + str(port1) + " " + str(myip) + " " + str(myport)])
+            ports += 1
+            subprocess.call(["python", "Server.py " + str(ports) + " " + str(ip1) + " " + str(port1) + " " + str(myip) + " " + str(myport)])
             # get port of each server in a list
             pass
         for i in self.clients:
