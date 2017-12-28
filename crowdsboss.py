@@ -1,6 +1,7 @@
 import rpyc
 import subprocess
 import socket
+import thread
 from cmd import Cmd
 from rpyc.utils.server import ThreadedServer
 from rpDBMethods import Client
@@ -177,11 +178,15 @@ class CrowdsMaster(rpyc.Service):
         data.servers.append(port)
 
 
+def server_start()
+    ThreadedServer(CrowdsMaster, port=data.port,
+                   protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
+
+
 def main():
     global data
     data = PersistentData()
-    ThreadedServer(CrowdsMaster, port=data.port,
-                   protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
+    thread.start_new_thread(server_start, ())
     myConsole = CrowdsConsole()
     myConsole.prompt = ">"
     myConsole.cmdloop("Server has started\nAvailable commands\nstable_mathcing\nadd_internship\nremove_internship\n")
