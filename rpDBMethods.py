@@ -228,5 +228,5 @@ class DBConnectionService(rpyc.Service):
 
 from rpyc.utils.server import ThreadedServer
 
-ThreadedServer(DBConnectionService, port=1234,
-               protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
+if __name__ == "__main__":
+    ThreadedServer(DBConnectionService, port=1234,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
