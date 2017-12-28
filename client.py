@@ -47,7 +47,7 @@ class ClientComm(cmd.Cmd):
     def do_start_matching(self, args):
         global pref, port, ip
         if pref > 4:
-            conn = rpyc.connect("10.142.0.3", 1234, config={"allow_all_attrs": True})
+            conn = rpyc.connect("10.142.0.2", 1234, config={"allow_all_attrs": True})
             conn.root.connect_me(ip, port)
             conn.close()
             # ThreadedServer(ClientServer, port=port,
@@ -67,7 +67,7 @@ class ClientComm(cmd.Cmd):
         me.locations = locations
         me.languages = languages
         global result
-        result = ClientServer.exposed_send_data(ClientServer(), my_server, me)
+        result = ClientServer.exposed_send_data(my_server, me)
 
 
 class ClientServer(rpyc.Service):
@@ -80,6 +80,16 @@ class ClientServer(rpyc.Service):
         next_client = client_list[random.randint(0, len(client_list)-1)]
 
     def exposed_send_data(self, server, data):
+        rand = random.randint(1, 100)
+        if rand < 20:
+            conn = rpyc.connect(server.host, server.port, config={"allow_all_attrs": True})
+            return conn.root.findMeAnInternshipAlready(data)
+        else:
+            conn = rpyc.connect(next_client.host, next_client.port, config={"allow_all_attrs": True})
+            return conn.root.send_data(server, data)
+
+    @staticmethod
+    def send_data(server, data):
         rand = random.randint(1, 100)
         if rand < 20:
             conn = rpyc.connect(server.host, server.port, config={"allow_all_attrs": True})
