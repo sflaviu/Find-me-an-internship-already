@@ -55,7 +55,6 @@ class DBConnectionService(rpyc.Service):
 
         def connect(self):
             self.connection = pymysql.connect(self.host, self.user, self.password, self.dbName)
-            self.cursor = self.connection.cursor()
 
         def isConnected(self):
             if self.connection is None:
@@ -64,6 +63,7 @@ class DBConnectionService(rpyc.Service):
 
         def exposed_getClients(self):
             self.connect()
+            self.cursor = self.connection.cursor()
             clients = []
             self.cursor.execute("SELECT * FROM Client")
             resultSet = self.cursor.fetchall()
@@ -82,11 +82,13 @@ class DBConnectionService(rpyc.Service):
                 for e in resultSet2:
                     client.languages.append(e[1])
                 clients.append(client)
+            self.cursor.close()
             self.connection.close()
             return clients
 
         def exposed_getInternships(self):
             self.connect()
+            self.cursor = self.connection.cursor()
             internships = []
             self.cursor.execute("SELECT * FROM Internship")
             resultSet = self.cursor.fetchall()
@@ -99,10 +101,13 @@ class DBConnectionService(rpyc.Service):
                 internship.experience = row[5]
                 internship.duration = row[6]
                 internships.append(internship)
+            self.cursor.close()
             self.connection.close()
             return internships
 
         def exposed_getCompanies(self):
+            self.connect()
+            self.cursor = self.connection.cursor()
             companies = []
             sql = "SELECT * FROM Company"
             self.cursor.execute(sql)
@@ -112,9 +117,13 @@ class DBConnectionService(rpyc.Service):
                 company.id = row[0]
                 company.name = row[1]
                 companies.append(company)
+            self.cursor.close()
+            self.connection.close()
             return companies
 
         def exposed_getLocations(self):
+            self.connect()
+            self.cursor = self.connection.cursor()
             locations = []
             sql = "SELECT * FROM Location"
             self.cursor.execute(sql)
@@ -124,9 +133,13 @@ class DBConnectionService(rpyc.Service):
                 location.id = row[0]
                 location.city = row[1]
                 locations.append(location)
+            self.cursor.close()
+            self.connection.close()
             return locations
 
         def exposed_getLanguages(self):
+            self.connect()
+            self.cursor = self.connection.cursor()
             languages = []
             sql = "SELECT * FROM Language"
             self.cursor.execute(sql)
@@ -136,10 +149,13 @@ class DBConnectionService(rpyc.Service):
                 language.id = row[0]
                 language.name = row[1]
                 languages.append(language)
+            self.cursor.close()
+            self.connection.close()
             return languages
 
         def exposed_insertClient(self, client):
             self.connect()
+            self.cursor = self.connection.cursor()
             sql = """INSERT INTO Clieant(client_id, username, password_encr, password_salt, 
             experience, duration) VALUES ('%d','%s','%s','%s','%d','%d')""" % \
                   (client.id, client.userName, client.password_encr, client.password_salt, \
@@ -154,36 +170,54 @@ class DBConnectionService(rpyc.Service):
                 VALUES ('%d', '%d')""" % (client.id, l)
                 self.cursor.execute(sql)
             self.connection.commit()
+            self.cursor.close()
             self.connection.close()
 
         def exposed_insertInternship(self, internship):
+            self.connect()
+            self.cursor = self.connection.cursor()
             sql = """INSERT INTO Internship (internship_id, company_id,
             location_id, language_id, experience, duration) values ('%d', '%d',
             '%d', '%d', '%d', '%d')""" % (internship.id, internship.company, internship.location, \
                                           internship.language, internship.experience, internship.duration)
             self.cursor.execute(sql)
             self.connection.commit()
+            self.cursor.close()
+            self.connection.close()
 
         def exposed_insertLanguage(self, language):
+            self.connect()
+            self.cursor = self.connection.cursor()
             sql = """INSERT INTO Language (language_id, name)
             values ('%d', '%s')""" % (language.id, language.name)
             self.cursor.execute(sql)
             self.connection.commit()
+            self.cursor.close()
+            self.connection.close()
 
         def exposed_insertLocation(self, location):
+            self.connect()
+            self.cursor = self.connection.cursor()
             sql = """INSERT INTO Location (location_id, city)
             values ('%d', '%s')""" % (location.id, location.city)
             self.cursor.execute(sql)
             self.connection.commit()
+            self.cursor.close()
+            self.connection.close()
 
         def exposed_insertCompany(self, company):
+            self.connect()
+            self.cursor = self.connection.cursor()
             sql = """INSERT INTO Company (company_id, name)
             values ('%d', '%s')""" % (company.id, company.name)
             self.cursor.execute(sql)
             self.connection.commit()
+            self.cursor.close()
+            self.connection.close()
 
         def exposed_deleteClient(self, client):
             self.connect()
+            self.cursor = self.connection.cursor()
             sql = "DELETE FROM Client_Location WHERE client_id='%d'" % (client.id)
             self.cursor.execute(sql)
             sql = "DELETE FROM Client_Language WHERE client_id='%d'" % (client.id)
@@ -191,14 +225,21 @@ class DBConnectionService(rpyc.Service):
             sql = "DELETE FROM Client WHERE client_id='%d'" % (client.id)
             self.cursor.execute(sql)
             self.connection.commit()
+            self.cursor.close()
             self.connection.close()
 
         def exposed_deleteInternship(self, internship):
+            self.connect()
+            self.cursor = self.connection.cursor()
             sql = "Delete FROM Internship where internship_id = '%d'" % internship.id
             self.cursor.execute(sql)
             self.connection.commit()
+            self.cursor.close()
+            self.connection.close()
 
         def exposed_deleteLanguage(self, language):
+            self.connect()
+            self.cursor = self.connection.cursor()
             sql = "DELETE FROM Internship WHERE language_id='%d'" % (language.id)
             self.cursor.execute(sql)
             sql = "DELETE FROM Client_Language WHERE language_id='%d'" % (language.id)
@@ -206,8 +247,12 @@ class DBConnectionService(rpyc.Service):
             sql = "DELETE FROM Language WHERE language_id='%d'" % (language.id)
             self.cursor.execute(sql)
             self.connection.commit()
+            self.cursor.close()
+            self.connection.close()
 
         def exposed_deleteLocation(self, location):
+            self.connect()
+            self.cursor = self.connection.cursor()
             sql = "DELETE FROM Client_Location WHERE location_id='%d'" % (location.id)
             self.cursor.execute(sql)
             sql = "DELETE FROM Internship WHERE location_id='%d'" % (location.id)
@@ -215,13 +260,19 @@ class DBConnectionService(rpyc.Service):
             sql = "DELETE FROM Location WHERE location_id='%d'" % (location.id)
             self.cursor.execute(sql)
             self.connection.commit()
+            self.cursor.close()
+            self.connection.close()
 
         def exposed_deleteCompany(self, company):
+            self.connect()
+            self.cursor = self.connection.cursor()
             sql = "DELETE FROM Internship WHERE company_id='%d'" % (company.id)
             self.cursor.execute(sql)
             sql = "DELETE FROM Company WHERE company_id='%d'" % (company.id)
             self.cursor.execute(sql)
             self.connection.commit()
+            self.cursor.close()
+            self.connection.close()
 
         def exposed_Sal(self):
             print("PaBafta")
