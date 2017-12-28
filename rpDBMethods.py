@@ -1,4 +1,5 @@
 import pymysql
+import thread
 
 import rpyc
 
@@ -225,8 +226,14 @@ class DBConnectionService(rpyc.Service):
         def exposed_Sal(self):
             print("PaBafta")
 
+def server_start():
+    ThreadedServer(DBConnectionService, port=1234,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
 from rpyc.utils.server import ThreadedServer
 
 if __name__ == "__main__":
-    ThreadedServer(DBConnectionService, port=1234,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
+    print "ok"
+    thread.start_new_thread(server_start,())
+    print "also ok"
+    while 1==1:
+        pass

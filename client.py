@@ -4,6 +4,7 @@ from rpyc.utils.server import ThreadedServer
 import sys
 import random
 from rpDBMethods import Client
+import thread
 from Server import MiddleServer
 
 
@@ -44,13 +45,14 @@ class ClientComm(cmd.Cmd):
         print "Languages: " + str(languages)
 
     def do_start_matching(self, args):
-        global pref
+        global pref, port, ip
         if pref > 4:
             conn = rpyc.connect("10.142.0.2", 1234, config={"allow_all_attrs": True})
             conn.root.connect_me(ip, port)
             conn.close()
-            ThreadedServer(ClientServer, port=port,
-                           protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
+            # ThreadedServer(ClientServer, port=port,
+            #             protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
+            thread.start_new_thread(start_server, ())
 
     def do_show_results(self, args):
         global result
@@ -94,6 +96,12 @@ class ClientServer(rpyc.Service):
             if conn.root.connectionAllowed():
                 my_server = i
             conn.close()
+
+
+def start_server():
+    global port, ip
+    ThreadedServer(ClientServer, port=port,
+                   protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
 
 my_server = None
