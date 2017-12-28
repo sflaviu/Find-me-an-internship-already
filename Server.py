@@ -2,8 +2,8 @@ import sys
 import rpyc
 import socket
 import thread
-from DBConnection27 import Internship
-from DBConnection27 import Client
+from rpDBMethods import Internship
+from rpDBMethods import Client
 from rpyc.utils.server import ThreadedServer
 
 data = None
