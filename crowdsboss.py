@@ -178,7 +178,7 @@ class CrowdsMaster(rpyc.Service):
         data.servers.append(port)
 
 
-def server_start()
+def server_start():
     ThreadedServer(CrowdsMaster, port=data.port,
                    protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
