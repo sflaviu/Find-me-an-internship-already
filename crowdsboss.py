@@ -15,7 +15,7 @@ global data
 class PersistentData():
     def __init__(self):
         self.clients = []
-        self.clientsRPYC = []
+        #self.clientsRPYC = []
         self.servers = []
         # to be changed accordingly
         self.host = socket.gethostname()
@@ -34,13 +34,15 @@ class CrowdsConsole(Cmd):
                  + " " + str(data.dbPort) + " " + str(data.host) + " " + str(data.port)])
             # get port of each server in a list
             data.servers.append((data.host, ports))
-        for c in data.clientsRPYC:
+        for c in data.clients:
             # name should be adjusted accordingly
-            s = c.root.ClientServer()
+            conn = rpyc.connect(c[0], c[1], config={"allow_all_attrs": True})
+            s = conn.root.ClientServer()
             s.get_servers(data.servers)
             clients = data.clients
             clients.remove(c)
             s.get_clients(clients)
+            conn.close()
 
     def do_add_internship(self, args):
         connection = rpyc.connect(data.dbHost, data.dbPort, config={"allow_all_attrs": True})
@@ -160,8 +162,8 @@ class CrowdsMaster(rpyc.Service):
     #called by client
     def exposed_connect_me(self, ip, port):
         global data
-        client = rpyc.connect(ip, port, config={"allow_all_attrs": True})
-        data.clientsRPYC.append(client)
+        #client = rpyc.connect(ip, port, config={"allow_all_attrs": True})
+        #data.clientsRPYC.append(client)
         data.clients.append((ip, port))
 
     def exposed_get_clients(self):
