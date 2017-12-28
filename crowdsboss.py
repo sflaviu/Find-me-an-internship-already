@@ -42,7 +42,7 @@ class CrowdsConsole(Cmd):
             clients.remove(c)
             s.get_clients(clients)
 
-    def do_add_internship(self):
+    def do_add_internship(self, args):
         connection = rpyc.connect(data.dbHost, data.dbPort, config={"allow_all_attrs": True})
         db = connection.root.DBConnection()
         internships = db.getInternships()
@@ -128,7 +128,7 @@ class CrowdsConsole(Cmd):
         db.insertInternship(myInternship)
         connection.close()
 
-    def do_remove_internship(self):
+    def do_remove_internship(self, args):
         connection = rpyc.connect(data.dbHost, data.dbPort, config={"allow_all_attrs": True})
         db = connection.root.DBConnection()
         internships = db.getInternships()
