@@ -20,7 +20,7 @@ class PersistentData():
         # to be changed accordingly
         self.host = socket.gethostname()
         self.port = 1024
-        self.dbHost = "localhost"
+        self.dbHost = "10.142.0.2"
         self.dbPort = 1234
 
 class CrowdsConsole(Cmd):
