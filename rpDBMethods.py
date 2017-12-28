@@ -2,6 +2,7 @@ import pymysql
 
 import rpyc
 
+
 class Client:
     def __init__(self):
         self.id = 0
@@ -13,14 +14,33 @@ class Client:
         self.locations = []
         self.languages = []
 
+
 class Internship:
     def __init__(self):
         self.id = 0
-        self.company = ""
+        self.company = 0
         self.location = 0
         self.language = 0
         self.experience = 0
         self.duration = 0
+
+class Company:
+    def __init__(self):
+        self.id = 0
+        self.name = ""
+
+
+class Location:
+    def __init__(self):
+        self.id = 0
+        self.city = ""
+
+
+class Language:
+    def __init__(self):
+        self.id = 0
+        self.name = ""
+
 
 class DBConnectionService(rpyc.Service):
     class exposed_DBConnection(object):
@@ -31,7 +51,7 @@ class DBConnectionService(rpyc.Service):
             self.dbName = "internship"
             self.connection = None
             self.cursor = None
-        
+
         def connect(self):
             self.connection = pymysql.connect(self.host, self.user, self.password, self.dbName)
             self.cursor = self.connection.cursor()
@@ -51,7 +71,7 @@ class DBConnectionService(rpyc.Service):
                 client.id = row[0]
                 client.userName = row[1]
                 client.experience = row[4]
-                client.duration  = row[5]
+                client.duration = row[5]
                 self.cursor.execute("SELECT * FROM Client_Language WHERE client_id=" + str(client.id))
                 resultSet2 = self.cursor.fetchall()
                 for e in resultSet2:
@@ -81,40 +101,132 @@ class DBConnectionService(rpyc.Service):
             self.connection.close()
             return internships
 
+        def exposed_getCompanies(self):
+            companies = []
+            sql = "SELECT * FROM Company"
+            self.cursor.execute(sql)
+            resultSet = self.cursor.fetchall()
+            for row in resultSet:
+                company = Company()
+                company.id = row[0]
+                company.name = row[1]
+                companies.append(company)
+            return companies
+
+        def exposed_getLocations(self):
+            locations = []
+            sql = "SELECT * FROM Location"
+            self.cursor.execute(sql)
+            resultSet = self.cursor.fetchall()
+            for row in resultSet:
+                location = Location()
+                location.id = row[0]
+                location.city = row[1]
+                locations.append(location)
+            return locations
+
+        def exposed_getLanguages(self):
+            languages = []
+            sql = "SELECT * FROM Language"
+            self.cursor.execute(sql)
+            resultSet = self.cursor.fetchall()
+            for row in resultSet:
+                language = Language()
+                language.id = row[0]
+                language.name = row[1]
+                languages.append(language)
+            return languages
+
         def exposed_insertClient(self, client):
             self.connect()
-            sql = """INSERT INTO CLIENT(client_id, username, password_encr, password_salt, 
+            sql = """INSERT INTO Clieant(client_id, username, password_encr, password_salt, 
             experience, duration) VALUES ('%d','%s','%s','%s','%d','%d')""" % \
-                  (client.id, client.userName, client.password_encr,client.password_salt, \
+                  (client.id, client.userName, client.password_encr, client.password_salt, \
                    client.experience, client.duration)
             self.cursor.execute(sql)
             for l in client.languages:
-                sql = """INSERT INTO CLIENT_LANGUAGE(language_id, client_id)
+                sql = """INSERT INTO Client_Language(language_id, client_id)
                 VALUES ('%d', '%d')""" % (l, client.id)
                 self.cursor.execute(sql)
             for l in client.locations:
-                sql = """INSERT INTO CLIENT_LOCATION(client_id, location_id)
+                sql = """INSERT INTO Client_Location(client_id, location_id)
                 VALUES ('%d', '%d')""" % (client.id, l)
                 self.cursor.execute(sql)
             self.connection.commit()
             self.connection.close()
 
+        def exposed_insertInternship(self, internship):
+            sql = """INSERT INTO Internship (internship_id, company_id,
+            location_id, language_id, experience, duration) values ('%d', '%d',
+            '%d', '%d', '%d', '%d')""" % (internship.id, internship.company, internship.location, \
+                                          internship.language, internship.experience, internship.duration)
+            self.cursor.execute(sql)
+            self.connection.commit()
+
+        def exposed_insertLanguage(self, language):
+            sql = """INSERT INTO Language (language_id, name)
+            values ('%d', '%s')""" % (language.id, language.name)
+            self.cursor.execute(sql)
+            self.connection.commit()
+
+        def exposed_insertLocation(self, location):
+            sql = """INSERT INTO Location (location_id, city)
+            values ('%d', '%s')""" % (location.id, location.city)
+            self.cursor.execute(sql)
+            self.connection.commit()
+
+        def exposed_insertCompany(self, company):
+            sql = """INSERT INTO Company (company_id, name)
+            values ('%d', '%s')""" % (company.id, company.name)
+            self.cursor.execute(sql)
+            self.connection.commit()
+
         def exposed_deleteClient(self, client):
             self.connect()
-            sql = "DELETE FROM CLIENT_LOCATION WHERE client_id='%d'" % (client.id)
+            sql = "DELETE FROM Client_Location WHERE client_id='%d'" % (client.id)
             self.cursor.execute(sql)
-            sql = "DELETE FROM CLIENT_LANGUAGE WHERE client_id='%d'" % (client.id)
+            sql = "DELETE FROM Client_Language WHERE client_id='%d'" % (client.id)
             self.cursor.execute(sql)
-            sql = "DELETE FROM CLIENT WHERE client_id='%d'" % (client.id)
+            sql = "DELETE FROM Client WHERE client_id='%d'" % (client.id)
             self.cursor.execute(sql)
             self.connection.commit()
             self.connection.close()
 
+        def exposed_deleteInternship(self, internship):
+            sql = "Delete FROM Internship where internship_id = '%d'" % internship.id
+            self.cursor.execute(sql)
+            self.connection.commit()
+
+        def exposed_deleteLanguage(self, language):
+            sql = "DELETE FROM Internship WHERE language_id='%d'" % (language.id)
+            self.cursor.execute(sql)
+            sql = "DELETE FROM Client_Language WHERE language_id='%d'" % (language.id)
+            self.cursor.execute(sql)
+            sql = "DELETE FROM Language WHERE language_id='%d'" % (language.id)
+            self.cursor.execute(sql)
+            self.connection.commit()
+
+        def exposed_deleteLocation(self, location):
+            sql = "DELETE FROM Client_Location WHERE location_id='%d'" % (location.id)
+            self.cursor.execute(sql)
+            sql = "DELETE FROM Internship WHERE location_id='%d'" % (location.id)
+            self.cursor.execute(sql)
+            sql = "DELETE FROM Location WHERE location_id='%d'" % (location.id)
+            self.cursor.execute(sql)
+            self.connection.commit()
+
+        def exposed_deleteCompany(self, company):
+            sql = "DELETE FROM Internship WHERE company_id='%d'" % (company.id)
+            self.cursor.execute(sql)
+            sql = "DELETE FROM Company WHERE company_id='%d'" % (company.id)
+            self.cursor.execute(sql)
+            self.connection.commit()
+
         def exposed_Sal(self):
             print("PaBafta")
 
+
 from rpyc.utils.server import ThreadedServer
-ThreadedServer(DBConnectionService, port = 1234,protocol_config = {"allow_public_attrs" : True, "allow_all_attrs":True}).start()
 
-
-
+ThreadedServer(DBConnectionService, port=1234,
+               protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
