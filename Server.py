@@ -71,18 +71,20 @@ class MiddleServer(rpyc.Service):
                     match = match + 1
                 if len(client.locations) == 0:
                     match = match + 2
-                else :
+                else:
                     if (i.location is not None) and (i.location in client.locations):
                         match = match + 2
                 if len(client.languages) == 0:
                     match = match + 3
+                else:
                     if (i.language is not None) and (i.language in client.languages):
                         match = match + 3
                 if match > bestMatch:
                     bestMatch = match
                     internship = i
+            internship2 = internship.clone()
             connection.close()
-            return internship
+            return internship2
 
     #only for testing reasons
     def sayHello(self):

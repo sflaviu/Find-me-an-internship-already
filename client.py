@@ -83,20 +83,24 @@ class ClientServer(rpyc.Service):
         rand = random.randint(1, 100)
         if rand < 20:
             conn = rpyc.connect(server.host, server.port, config={"allow_all_attrs": True})
-            return conn.root.findMeAnInternshipAlready(data)
+            internship = conn.root.findMeAnInternshipAlready(data)
+            return internship.clone()
         else:
             conn = rpyc.connect(next_client.host, next_client.port, config={"allow_all_attrs": True})
-            return conn.root.send_data(server, data)
+            internship = conn.root.send_data(server, data)
+            return internship.clone()
 
     @staticmethod
     def send_data(server, data):
         rand = random.randint(1, 100)
         if rand < 20:
             conn = rpyc.connect(server.host, server.port, config={"allow_all_attrs": True})
-            return conn.root.findMeAnInternshipAlready(data)
+            internship = conn.root.findMeAnInternshipAlready(data)
+            return internship.clone()
         else:
             conn = rpyc.connect(next_client.host, next_client.port, config={"allow_all_attrs": True})
-            return conn.root.send_data(server, data)
+            internship = conn.root.send_data(server, data)
+            return internship.clone()
 
     def exposed_choose_server(self):
         global my_server

@@ -25,6 +25,17 @@ class Internship:
         self.experience = 0
         self.duration = 0
 
+    def clone(self):
+        internship2 = Internship()
+        internship2.id = self.id
+        internship2.company = self.company
+        internship2.location = self.location
+        internship2.language = self.language
+        internship2.experience = self.experience
+        internship2.duration = self. duration
+        return internship2
+
+
 class Company:
     def __init__(self):
         self.id = 0
