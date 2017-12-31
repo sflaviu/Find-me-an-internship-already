@@ -67,7 +67,7 @@ class ClientComm(cmd.Cmd):
         me.locations = locations
         me.languages = languages
         global result
-        result = ClientServer.exposed_send_data(my_server, me)
+        result = ClientServer.send_data(my_server, me)
 
 
 class ClientServer(rpyc.Service):
