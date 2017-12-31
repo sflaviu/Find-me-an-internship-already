@@ -2,6 +2,7 @@ import rpyc
 import subprocess
 import socket
 import thread
+import os
 from cmd import Cmd
 from rpyc.utils.server import ThreadedServer
 from rpDBMethods import Client
@@ -29,9 +30,9 @@ class CrowdsConsole(Cmd):
         ports = 1024
         for i in data.clients:
             ports += 1
-            subprocess.call(
-                ["python", "Server.py " + str(data.host) + " " + str(ports) + " " + str(data.dbHost) //
-                 + " " + str(data.dbPort) + " " + str(data.host) + " " + str(data.port)])
+            os.system(
+                "python " + "Server.py " + str(data.host) + " " + str(ports) + " " + str(data.dbHost) //
+                 + " " + str(data.dbPort) + " " + str(data.host) + " " + str(data.port))
             # get port of each server in a list
             data.servers.append((data.host, ports))
         for c in data.clients:
