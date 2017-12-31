@@ -82,11 +82,11 @@ class ClientServer(rpyc.Service):
     def exposed_send_data(self, server, data):
         rand = random.randint(1, 100)
         if rand < 20:
-            conn = rpyc.connect(server.host, server.port, config={"allow_all_attrs": True})
+            conn = rpyc.connect(server[0], server[1], config={"allow_all_attrs": True})
             internship = conn.root.findMeAnInternshipAlready(data)
             return internship.clone()
         else:
-            conn = rpyc.connect(next_client.host, next_client.port, config={"allow_all_attrs": True})
+            conn = rpyc.connect(next_client[0], next_client[1], config={"allow_all_attrs": True})
             internship = conn.root.send_data(server, data)
             return internship.clone()
 
