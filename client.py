@@ -47,7 +47,7 @@ class ClientComm(cmd.Cmd):
     def do_start_matching(self, args):
         global pref, port, ip
         if pref > 4:
-            conn = rpyc.connect("10.142.0.3", 1234, config={"allow_all_attrs": True})
+            conn = rpyc.connect("10.142.0.3", 1024, config={"allow_all_attrs": True})
             conn.root.connect_me(ip, port)
             conn.close()
             # ThreadedServer(ClientServer, port=port,
