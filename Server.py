@@ -47,7 +47,7 @@ class MiddleServer(rpyc.Service):
     def exposed_connectionAllowed(self):
         global data
         with data.threadLock:
-            if data.connections > 1:
+            if MiddleServer.connections > 1:
                 return False
             return True
 
@@ -71,20 +71,18 @@ class MiddleServer(rpyc.Service):
                     match = match + 1
                 if len(client.locations) == 0:
                     match = match + 2
-                else:
+                else :
                     if (i.location is not None) and (i.location in client.locations):
                         match = match + 2
                 if len(client.languages) == 0:
                     match = match + 3
-                else:
                     if (i.language is not None) and (i.language in client.languages):
                         match = match + 3
                 if match > bestMatch:
                     bestMatch = match
                     internship = i
-            internship2 = internship.clone()
             connection.close()
-            return internship2
+            return internship
 
     #only for testing reasons
     def sayHello(self):
@@ -98,7 +96,7 @@ class MiddleServer(rpyc.Service):
 def main():
     global data
     data = PersistentData(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],sys.argv[5], sys.argv[6])
-    ThreadedServer(MiddleServer, port = sys.argv[2],
+    ThreadedServer(MiddleServer, port = int(sys.argv[2]),
                    protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
 if __name__ == "__main__":

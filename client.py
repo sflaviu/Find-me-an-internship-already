@@ -58,6 +58,10 @@ class ClientComm(cmd.Cmd):
         global result
         print str(result)
 
+    def do_see_client(self, args):
+        print next_client[0]
+        print str(next_client[1])
+
     def do_send_my_data(self, args):
         # check if data can be sent
         me = Client()
@@ -106,7 +110,8 @@ class ClientServer(rpyc.Service):
         global my_server
         # my_server = servers[random.randint(0, len(servers)-1)]
         for i in servers:
-            conn = rpyc.connect(i.host, i.port, config={"allow_all_attrs": True})
+            print "Connecting to "+i[0]+" "+str(i[1])
+            conn = rpyc.connect(i[0], i[1], config={"allow_all_attrs": True})
             if conn.root.connectionAllowed():
                 my_server = i
             conn.close()

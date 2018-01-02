@@ -3,6 +3,7 @@ import subprocess
 import socket
 import thread
 import os
+import time
 from cmd import Cmd
 from rpyc.utils.server import ThreadedServer
 from rpDBMethods import Client
@@ -19,7 +20,7 @@ class PersistentData():
         #self.clientsRPYC = []
         self.servers = []
         # to be changed accordingly
-        self.host = socket.gethostname()
+        self.host = "10.142.0.3"
         self.port = 1024
         self.dbHost = "10.142.0.2"
         self.dbPort = 1234
@@ -30,20 +31,26 @@ class CrowdsConsole(Cmd):
         ports = 1024
         for i in data.clients:
             ports += 1
-            os.system(
-                "python " + "Server.py " + str(data.host) + " " + str(ports) + " " + str(data.dbHost) //
-                 + " " + str(data.dbPort) + " " + str(data.host) + " " + str(data.port))
+            thread.start_new_thread(
+                    os.system,
+                    ("python "+ "Server.py " + str(data.host) + " " + str(ports) + " " + str(data.dbHost) + " " + str(data.dbPort) + " " + str(data.host) + " " + str(data.port),))
             # get port of each server in a list
             data.servers.append((data.host, ports))
+        time.sleep(1)
         for c in data.clients:
             # name should be adjusted accordingly
             conn = rpyc.connect(c[0], c[1], config={"allow_all_attrs": True})
-            s = conn.root.ClientServer()
+            s = conn.root
             s.get_servers(data.servers)
+            s.choose_server()
             clients = data.clients
             clients.remove(c)
             s.get_clients(clients)
             conn.close()
+
+    def do_show_conn(self, args):
+        global data
+        print str(data.clients)
 
     def do_add_internship(self, args):
         connection = rpyc.connect(data.dbHost, data.dbPort, config={"allow_all_attrs": True})
