@@ -43,7 +43,7 @@ class CrowdsConsole(Cmd):
             s = conn.root
             s.get_servers(data.servers)
             s.choose_server()
-            clients = data.clients
+            clients = list(data.clients)
             clients.remove(c)
             s.get_clients(clients)
             conn.close()
