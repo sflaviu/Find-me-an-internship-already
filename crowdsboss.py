@@ -46,6 +46,7 @@ class CrowdsConsole(Cmd):
             clients = list(data.clients)
             clients.remove(c)
             s.get_clients(clients)
+            print "ok"
             conn.close()
 
     def do_show_conn(self, args):

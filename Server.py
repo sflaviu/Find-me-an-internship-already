@@ -80,7 +80,7 @@ class MiddleServer(rpyc.Service):
                         match = match + 3
                 if match > bestMatch:
                     bestMatch = match
-                    internship = i
+                    internship = str(i)
             connection.close()
             return internship
 

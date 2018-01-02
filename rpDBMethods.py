@@ -25,6 +25,10 @@ class Internship:
         self.experience = 0
         self.duration = 0
 
+    def __str__(self):
+        stri = str(self.id)+" "+str(self.company)+" +"+str(self.location)+" "+str(self.language)+" "+str(self.experience)+" "+str(self.duration)
+        return stri
+
     def clone(self):
         internship2 = Internship()
         internship2.id = self.id
