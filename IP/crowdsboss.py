@@ -193,7 +193,7 @@ class CrowdsMaster(rpyc.Service):
 class CrowdsIpChecker(rpyc.Service):
     def exposed_check_ip(self, sIp):
         global ipGiver
-        return ipGiver.chooseIp(sIp)
+        return ipGiver.checkIp(sIp)
 
 def server_start():
     ThreadedServer(CrowdsMaster, port=data.port,
