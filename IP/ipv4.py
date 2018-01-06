@@ -35,7 +35,7 @@ class IPv4:
         return currentAIp
 
     def checkIp(self, ip):
-        if assignedIp == ip:
+        if self.assignedIp == ip:
             return true
         return false
 
