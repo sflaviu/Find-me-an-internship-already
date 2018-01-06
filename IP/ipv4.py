@@ -15,7 +15,7 @@ class IPv4:
         time.sleep(2)
         newIp=chooseIP()
         return newIp
-        
+     
     def chooseIP(self):
         firstI=randint(1, 254)
         secondI=randint(0, 255)
