@@ -31,7 +31,7 @@ class IPv4:
                 if answer == true:
                     reconfiguredIP = reconfigure()
                     return reconfiguredIP
-        IPv4.allIps[currentAIp] = realIp
+        IPv4.allIps[currentAIp] = self.realIp
         return currentAIp
 
     def checkIp(self, ip):
