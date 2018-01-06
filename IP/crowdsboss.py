@@ -12,6 +12,8 @@ from rpDBMethods import Location
 from rpDBMethods import Language
 from rpDBMethods import Company
 
+from ipv4 import IPv4
+
 global data
 
 class PersistentData():
