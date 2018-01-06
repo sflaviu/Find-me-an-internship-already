@@ -17,7 +17,7 @@ class IPv4:
         newIp = chooseIP()
         return newIp
 
-    def chooseIP(self):
+    def chooseIp(self):
         firstI = randint(1, 254)
         secondI = randint(0, 255)
 
