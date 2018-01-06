@@ -10,7 +10,7 @@ class IPv4:
         self.realIp=sIps
         self.assignedIp="169.254.0.0" # Not usable IP
         # Range 169.254.1.0 to 169.254.254.255
-
+    
     def reconfigure(self):
         time.sleep(2)
         newIp=chooseIP()
