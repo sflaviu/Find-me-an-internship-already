@@ -24,7 +24,7 @@ class IPv4:
         currentAIp = '169.254.' + str(firstI) + '.' + str(secondI)
 
         for ip in IPv4.allIps.items():
-            if ip[1] != realIp:
+            if ip[1] != self.realIp:
                 conn = rpyc.connect(ip[1], 2222,
                                     config={'allow_all_attrs': True})
                 answer = conn.root.check_ip(currentAIp)
