@@ -18,8 +18,8 @@ class IPv4:
         return newIp
 
     def chooseIp(self):
-        firstI = randint(1, 254)
-        secondI = randint(0, 255)
+        firstI = random.randint(1, 254)
+        secondI = random.randint(0, 255)
 
         currentAIp = '169.254.' + str(firstI) + '.' + str(secondI)
 
@@ -38,6 +38,5 @@ class IPv4:
         if assignedIp == ip:
             return true
         return false
-
 
 
