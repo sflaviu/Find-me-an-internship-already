@@ -349,7 +349,7 @@ class DBIpChecker(rpyc.Service):
 
     def exposed_check_ip(self, sIp):
         global ipGiver
-        return ipGiver.chooseIp(sIp)
+        return ipGiver.checkIp(sIp)
 
 
 def server_start():
