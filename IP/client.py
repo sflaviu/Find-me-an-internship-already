@@ -10,13 +10,12 @@ from Server import MiddleServer
 
 from ipv4 import IPv4
 
-
 class ClientComm(cmd.Cmd):
-	#Method for showing IP
-	def do_show_ip(self)
-		global assignedIp
-		print("My assigned IP is: "+assignedIp)
-		
+    #Method for showing IP
+    def do_show_ip(self):
+        global assignedIp
+        print("My assigned IP is: "+assignedIp)
+
     def do_set_name(self, args):
         global pref
         global name
@@ -127,15 +126,15 @@ class ClientServer(rpyc.Service):
 class ClientIpChecker(rpyc.Service):
     def exposed_check_ip(self, sIp):
         global ipGiver
-		return ipGiver.chooseIp(sIp)
+        return ipGiver.chooseIp(sIp)
 		
 def start_server():
     global port, ip
     ThreadedServer(ClientServer, port=port,
                    protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
-def launch_Ip_checker()
-	ThreadedServer(ClientIpChecker,2222,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
+def launch_Ip_checker():
+    ThreadedServer(ClientIpChecker,2222,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
 my_server = None
 random.seed()

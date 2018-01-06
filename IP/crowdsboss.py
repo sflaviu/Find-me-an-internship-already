@@ -191,23 +191,23 @@ class CrowdsMaster(rpyc.Service):
 class CrowdsIpChecker(rpyc.Service):
     def exposed_check_ip(self, sIp):
         global ipGiver
-		return ipGiver.chooseIp(sIp)
+        return ipGiver.chooseIp(sIp)
 
 def server_start():
     ThreadedServer(CrowdsMaster, port=data.port,
                    protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
-def launch_Ip_checker()
-	ThreadedServer(CrowdsIpChecker,2222,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
+def launch_Ip_checker():
+    ThreadedServer(CrowdsIpChecker,2222,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
 
 def main():
     global data
     data = PersistentData()
 	
-	ipGiver=IPv4(ip)
-	assignedIp=ipGiver.chooseIp()
-	thread.start_new_thread(launch_Ip_checker, ())
+    ipGiver=IPv4(ip)
+    assignedIp=ipGiver.chooseIp()
+    thread.start_new_thread(launch_Ip_checker, ())
 	
     thread.start_new_thread(server_start, ())
     myConsole = CrowdsConsole()

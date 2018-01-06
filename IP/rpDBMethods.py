@@ -297,13 +297,13 @@ class DBConnectionService(rpyc.Service):
 class DBIpChecker(rpyc.Service):
     def exposed_check_ip(self, sIp):
         global ipGiver
-		return ipGiver.chooseIp(sIp)
+        return ipGiver.chooseIp(sIp)
 		
 def server_start():
     ThreadedServer(DBConnectionService, port=1234,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
-def launch_Ip_checker()
-	ThreadedServer(DBIpChecker,2222,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
+def launch_Ip_checker():
+    ThreadedServer(DBIpChecker,2222,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
 from rpyc.utils.server import ThreadedServer
 
@@ -315,6 +315,6 @@ if __name__ == "__main__":
     print "ok"
     thread.start_new_thread(server_start,())
     print "also ok"
-	print "My assignedIp is" + assignedIp
+    print "My assignedIp is" + assignedIp
     while 1==1:
         pass
