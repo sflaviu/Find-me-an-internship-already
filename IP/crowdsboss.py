@@ -200,7 +200,7 @@ def server_start():
                    protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
 def launch_Ip_checker():
-    ThreadedServer(CrowdsIpChecker,port=2222,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
+    ThreadedServer(CrowdsIpChecker,port=2223,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
 
 def main():
