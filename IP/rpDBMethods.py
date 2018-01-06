@@ -374,6 +374,6 @@ if __name__ == '__main__':
     print 'ok'
     thread.start_new_thread(server_start, ())
     print 'also ok'
-    print 'My assignedIp is' + assignedIp
+    print 'My assignedIp is ' + assignedIp
     while 1 == 1:
         pass
