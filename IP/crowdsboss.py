@@ -198,14 +198,14 @@ def server_start():
                    protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
 def launch_Ip_checker():
-    ThreadedServer(CrowdsIpChecker,2222,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
+    ThreadedServer(CrowdsIpChecker,port=2222,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
 
 def main():
     global data
     data = PersistentData()
 	
-    ipGiver=IPv4(ip)
+    ipGiver=IPv4(data.host)
     assignedIp=ipGiver.chooseIp()
     thread.start_new_thread(launch_Ip_checker, ())
 	
