@@ -307,7 +307,7 @@ def launch_Ip_checker():
 
 from rpyc.utils.server import ThreadedServer
 
-ipGiver=IPv4(ip)
+ipGiver=IPv4("10.142.0.2")
 assignedIp=ipGiver.chooseIp()
 thread.start_new_thread(launch_Ip_checker, ())
 
