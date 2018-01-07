@@ -38,8 +38,17 @@ class IPv4:
             i=i+1
         IPv4.allIps[currentAIp] = self.realIp
         IPv4.ports.append(self.serverPort)
+        
+        self.printIps()
         return currentAIp
 
+    def printIps(self):
+        print "All Ips"
+        for keys,values in IPv4.allIps.items():
+            print(keys)
+            print(values)
+            print ""
+            
     def checkIp(self, ip):
         if self.assignedIp == ip:
             return True
