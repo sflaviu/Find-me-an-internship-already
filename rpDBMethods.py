@@ -147,7 +147,7 @@ class DBConnectionService(rpyc.Service):
                 company = resultSet[0]
             self.cursor.close()
             self.connection.close()
-            return company.name
+            return company[0]
 
         def exposed_getLocationName(self, id):
             self.connect()
@@ -160,7 +160,7 @@ class DBConnectionService(rpyc.Service):
                 location = resultSet[0]
             self.cursor.close()
             self.connection.close()
-            return location.city
+            return location[0]
 
         def exposed_getLanguageName(self, id):
             self.connect()
@@ -173,7 +173,7 @@ class DBConnectionService(rpyc.Service):
                 language = resultSet[0]
             self.cursor.close()
             self.connection.close()
-            return language.name
+            return language[0]
 
         def exposed_getLocations(self):
             self.connect()
