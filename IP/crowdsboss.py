@@ -203,7 +203,7 @@ def launch_Ip_checker():
     global ipGiver
     ThreadedServer(CrowdsIpChecker,port=ipGiver.serverPort,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
-
+ipGiver=None
 def main():
     global data
     data = PersistentData()
