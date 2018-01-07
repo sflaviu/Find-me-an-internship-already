@@ -44,7 +44,7 @@ class IPv4(rpyc.Service):
         ni.lastport+=1
         
         self.printIps()
-        return (currentAIp,ni.lastport-1)
+        return (currentAIp,ni.lastport)
 
     def printIps(self):
         print "All Ips"
