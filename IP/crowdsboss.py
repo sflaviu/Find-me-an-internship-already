@@ -215,6 +215,7 @@ def main():
 
     ip=get_Ip()
 
+    global assignedIp
     assignedIp=ip[0]
 
     print "My assigned IP is "+assignedIp
