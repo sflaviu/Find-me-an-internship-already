@@ -135,7 +135,7 @@ def start_server():
 
 def launch_Ip_checker(portS):
     global ipGiver
-    ThreadedServer(ClientIpChecker,port=portS,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
+    ThreadedServer(ClientIpChecker,port=5555,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
 global ip
 def get_Ip():
