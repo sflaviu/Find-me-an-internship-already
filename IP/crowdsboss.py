@@ -211,11 +211,12 @@ def main():
     global ipGiver
     ipGiver=IPv4(data.host)
     assignedIp=ipGiver.chooseIp()
-    thread.start_new_thread(launch_Ip_checker, ())
 
     print "My assigned IP is "+assignedIp
 	
+    thread.start_new_thread(launch_Ip_checker, ())
     thread.start_new_thread(server_start, ())
+
     myConsole = CrowdsConsole()
     myConsole.prompt = ">"
     myConsole.cmdloop("Server has started\nAvailable commands\nstable_mathcing\nadd_internship\nremove_internship\n")
