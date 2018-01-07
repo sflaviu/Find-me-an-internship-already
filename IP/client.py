@@ -163,6 +163,7 @@ if __name__ == '__main__':
 
     aIp = get_Ip()
 
+    global assignedIp
     assignedIp = aIp[0]
 
     print "My assigned IP is " + assignedIp
