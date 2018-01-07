@@ -201,7 +201,7 @@ def server_start():
                    protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
 def launch_Ip_checker(portS):
-    ThreadedServer(CrowdsIpChecker,port=portS,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
+    ThreadedServer(CrowdsIpChecker,port=5555,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
 def get_Ip():
     global data
