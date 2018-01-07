@@ -5,7 +5,7 @@ import thread
 
 import rpyc
 
-from ipv4 import IPv4
+from rpyc.utils.server import ThreadedServer
 
 
 class Client:
@@ -348,8 +348,10 @@ class DBConnectionService(rpyc.Service):
 class DBIpChecker(rpyc.Service):
 
     def exposed_check_ip(self, sIp):
-        global ipGiver
-        return ipGiver.checkIp(sIp)
+        global assignedIp
+        if(assignedIp==sIp):
+            return true
+        return false
 
 
 def server_start():
@@ -358,23 +360,25 @@ def server_start():
                    'allow_all_attrs': True}).start()
 
 
-def launch_Ip_checker():
-    global ipGiver
-    ThreadedServer(DBIpChecker, port=ipGiver.serverPort,
-                   protocol_config={'allow_public_attrs': True,
-                   'allow_all_attrs': True}).start()
+def launch_Ip_checker(portS):
+    ThreadedServer(DBIpChecker,port=portS,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
+def get_Ip():
+    global data
+    conn=rpyc.connect(data.dbHost,port=4321,config={"allow_all_attrs": True})
+    return conn.root.chooseIp(data.host)
 
-from rpyc.utils.server import ThreadedServer
-
-ipGiver = IPv4('10.142.0.2')
-assignedIp = ipGiver.chooseIp()
-thread.start_new_thread(launch_Ip_checker, ())
+global assignedIp
 
 if __name__ == '__main__':
-    print 'ok'
+
+    ip = get_Ip()
+
+    assignedIp = ip[0]
+
+    print "My assigned IP is " + assignedIp
+
+    thread.start_new_thread(launch_Ip_checker, (ip[1]))
     thread.start_new_thread(server_start, ())
-    print 'also ok'
-    print 'My assignedIp is ' + assignedIp
     while 1 == 1:
         pass

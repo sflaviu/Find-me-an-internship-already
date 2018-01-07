@@ -12,8 +12,6 @@ from rpDBMethods import Location
 from rpDBMethods import Language
 from rpDBMethods import Company
 
-from ipv4 import IPv4
-
 global data
 
 class PersistentData():
@@ -199,22 +197,25 @@ def server_start():
     ThreadedServer(CrowdsMaster, port=data.port,
                    protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
-def launch_Ip_checker():
-    global ipGiver
-    ThreadedServer(CrowdsIpChecker,port=ipGiver.serverPort,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
+def launch_Ip_checker(portS):
+    ThreadedServer(CrowdsIpChecker,port=portS,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
-global ipGiver
+def get_Ip():
+    global data
+    conn=rpyc.connect(data.dbHost,port=4321,config={"allow_all_attrs": True})
+    return conn.root.chooseIp(data.host)
+
 def main():
     global data
     data = PersistentData()
-	
-    global ipGiver
-    ipGiver=IPv4(data.host)
-    assignedIp=ipGiver.chooseIp()
+
+    ip=get_Ip()
+
+    assignedIp=ip[0]
 
     print "My assigned IP is "+assignedIp
 	
-    thread.start_new_thread(launch_Ip_checker, ())
+    thread.start_new_thread(launch_Ip_checker, (ip[1]))
     thread.start_new_thread(server_start, ())
 
     myConsole = CrowdsConsole()
