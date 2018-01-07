@@ -7,6 +7,8 @@ from rpDBMethods import Client
 import thread
 from Server import MiddleServer
 
+global assignedIp
+
 class ClientComm(cmd.Cmd):
     #Method for showing IP
     def do_show_ip(self):
@@ -119,8 +121,6 @@ class ClientServer(rpyc.Service):
             if conn.root.connectionAllowed():
                 my_server = i
             conn.close()
-
-global assignedIp
 
 class ClientIpChecker(rpyc.Service):
 
