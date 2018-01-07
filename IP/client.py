@@ -7,9 +7,6 @@ from rpDBMethods import Client
 import thread
 from Server import MiddleServer
 
-
-from ipv4 import IPv4
-
 class ClientComm(cmd.Cmd):
     #Method for showing IP
     def do_show_ip(self):
@@ -124,38 +121,55 @@ class ClientServer(rpyc.Service):
             conn.close()
 
 class ClientIpChecker(rpyc.Service):
+
     def exposed_check_ip(self, sIp):
-        global ipGiver
-        return ipGiver.chooseIp(sIp)
+        global assignedIp
+        if(assignedIp==sIp):
+            return true
+        return false
 		
 def start_server():
     global port, ip
     ThreadedServer(ClientServer, port=port,
                    protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
-def launch_Ip_checker():
+def launch_Ip_checker(portS):
     global ipGiver
-    ThreadedServer(ClientIpChecker,port=ipGiver.serverPort,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
+    ThreadedServer(ClientIpChecker,port=portS,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
-my_server = None
-random.seed()
-pref = 0
-next_client = None
-name = ""
-exp = 0
-duration = 0
-locations = []
-languages = []
-servers = []
-ip = sys.argv[1]  # start with self ip and port
-port = int(sys.argv[2])
+global ip
+def get_Ip():
+    global ip
+    conn=rpyc.connect(ip,port=4321,config={"allow_all_attrs": True})
+    return conn.root.chooseIp("10.142.0.2")
 
-ipGiver=IPv4(ip)
-assignedIp=ipGiver.chooseIp()
-print "My assigned IP is "+assignedIp
-thread.start_new_thread(launch_Ip_checker, ())
+global assignedIp
 
-result = None
-cC = ClientComm()
-cC.prompt = 'Client>>'
-cC.cmdloop('Client')
+if __name__ == '__main__':
+    my_server = None
+    random.seed()
+    pref = 0
+    next_client = None
+    name = ""
+    exp = 0
+    duration = 0
+    locations = []
+    languages = []
+    servers = []
+
+    global ip
+    ip = sys.argv[1]  # start with self ip and port
+    port = int(sys.argv[2])
+
+    aIp = get_Ip()
+
+    assignedIp = aIp[0]
+
+    print "My assigned IP is " + assignedIp
+
+    thread.start_new_thread(launch_Ip_checker, (ip[1],))
+
+    result = None
+    cC = ClientComm()
+    cC.prompt = 'Client>>'
+    cC.cmdloop('Client')

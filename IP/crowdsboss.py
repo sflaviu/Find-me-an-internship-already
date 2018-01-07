@@ -189,9 +189,12 @@ class CrowdsMaster(rpyc.Service):
         data.servers.append(port)
 
 class CrowdsIpChecker(rpyc.Service):
+
     def exposed_check_ip(self, sIp):
-        global ipGiver
-        return ipGiver.checkIp(sIp)
+        global assignedIp
+        if(assignedIp==sIp):
+            return true
+        return false
 
 def server_start():
     ThreadedServer(CrowdsMaster, port=data.port,
@@ -205,6 +208,7 @@ def get_Ip():
     conn=rpyc.connect(data.dbHost,port=4321,config={"allow_all_attrs": True})
     return conn.root.chooseIp(data.host)
 
+global assignedIp
 def main():
     global data
     data = PersistentData()

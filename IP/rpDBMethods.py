@@ -364,7 +364,6 @@ def launch_Ip_checker(portS):
     ThreadedServer(DBIpChecker,port=portS,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
 def get_Ip():
-    global data
     conn=rpyc.connect("localhost",port=4321,config={"allow_all_attrs": True})
     return conn.root.chooseIp("10.142.0.2")
 
