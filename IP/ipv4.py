@@ -31,7 +31,8 @@ class IPv4(rpyc.Service):
         i=0
         for ip in ni.allIps.items():
             if ip[1] != rIp:
-                print ip[1] +" "+ ni.ports[i]
+                print ip[1] 
+                print ni.ports[i]
                 conn = rpyc.connect(ip[1], ni.ports[i],config={'allow_all_attrs': True})
                 answer = conn.root.check_ip(currentAIp)
                 if answer == True:
