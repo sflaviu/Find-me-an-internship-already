@@ -120,6 +120,8 @@ class ClientServer(rpyc.Service):
                 my_server = i
             conn.close()
 
+global assignedIp
+
 class ClientIpChecker(rpyc.Service):
 
     def exposed_check_ip(self, sIp):
@@ -143,7 +145,6 @@ def get_Ip():
     conn=rpyc.connect("10.142.0.6",port=4321,config={"allow_all_attrs": True})
     return conn.root.chooseIp(ip)
 
-global assignedIp
 
 if __name__ == '__main__':
     my_server = None
