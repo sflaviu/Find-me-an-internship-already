@@ -193,8 +193,8 @@ class CrowdsIpChecker(rpyc.Service):
     def exposed_check_ip(self, sIp):
         global assignedIp
         if(assignedIp==sIp):
-            return true
-        return false
+            return True
+        return False
 
 def server_start():
     ThreadedServer(CrowdsMaster, port=data.port,
