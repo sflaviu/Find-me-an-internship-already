@@ -136,6 +136,45 @@ class DBConnectionService(rpyc.Service):
             self.connection.close()
             return companies
 
+        def exposed_getCompanyName(self, id):
+            self.connect()
+            self.cursor = self.connection.cursor()
+            company = None
+            sql = "SELECT Name FROM Company where Company_ID = %d" % id
+            self.cursor.execute(sql)
+            resultSet = self.cursor.fetchall()
+            if len(resultSet)>0:
+                company = resultSet[0]
+            self.cursor.close()
+            self.connection.close()
+            return company
+
+        def exposed_getLocationName(self, id):
+            self.connect()
+            self.cursor = self.connection.cursor()
+            location = None
+            sql = "SELECT City FROM Location where Location_ID = %d" % id
+            self.cursor.execute(sql)
+            resultSet = self.cursor.fetchall()
+            if len(resultSet)>0:
+                location = resultSet[0]
+            self.cursor.close()
+            self.connection.close()
+            return location
+
+        def exposed_getLanguageName(self, id):
+            self.connect()
+            self.cursor = self.connection.cursor()
+            language = None
+            sql = "SELECT Name FROM Language where Language_ID = %d" % id
+            self.cursor.execute(sql)
+            resultSet = self.cursor.fetchall()
+            if len(resultSet)>0:
+                language = resultSet[0]
+            self.cursor.close()
+            self.connection.close()
+            return language
+
         def exposed_getLocations(self):
             self.connect()
             self.cursor = self.connection.cursor()
