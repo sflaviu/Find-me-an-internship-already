@@ -205,8 +205,8 @@ def launch_Ip_checker(portS):
 
 def get_Ip():
     global data
-    conn=rpyc.connect(data.dbHost,port=4321,config={"allow_all_attrs": True})
-    return conn.root.chooseIp(data.host)
+    conn=rpyc.connect("10.142.0.2",port=4321,config={"allow_all_attrs": True})
+    return conn.root.chooseIp("10.142.0.3")
 
 global assignedIp
 def main():
