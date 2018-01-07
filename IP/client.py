@@ -155,6 +155,12 @@ assignedIp=ipGiver.chooseIp()
 print "My assigned IP is "+assignedIp
 thread.start_new_thread(launch_Ip_checker, ())
 
+print "All Ips"
+for keys,values in IPv4.allIps.items():
+    print(keys)
+    print(values)
+    print ""
+
 result = None
 cC = ClientComm()
 cC.prompt = 'Client>>'
