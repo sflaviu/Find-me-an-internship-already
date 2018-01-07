@@ -41,7 +41,7 @@ class IPv4(rpyc.Service):
             i=i+1
         ni.allIps[currentAIp] = rIp
         ni.ports.append(ni.lastport+1)
-        ni.lastport+=1
+        ni.lastport=ni.lastport+1
         
         self.printIps()
         return (currentAIp,ni.lastport)
