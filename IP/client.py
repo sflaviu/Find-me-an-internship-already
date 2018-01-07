@@ -152,6 +152,7 @@ port = int(sys.argv[2])
 
 ipGiver=IPv4(ip)
 assignedIp=ipGiver.chooseIp()
+print "My assigned IP is "+assignedIp
 thread.start_new_thread(launch_Ip_checker, ())
 
 result = None
