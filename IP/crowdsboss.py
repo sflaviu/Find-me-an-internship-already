@@ -215,7 +215,7 @@ def main():
 
     print "My assigned IP is "+assignedIp
 	
-    thread.start_new_thread(launch_Ip_checker, (ip[1]))
+    thread.start_new_thread(launch_Ip_checker, (ip[1],))
     thread.start_new_thread(server_start, ())
 
     myConsole = CrowdsConsole()
