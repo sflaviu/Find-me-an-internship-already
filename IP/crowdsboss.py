@@ -13,6 +13,7 @@ from rpDBMethods import Language
 from rpDBMethods import Company
 
 global data
+global assignedIp
 
 class PersistentData():
     def __init__(self):
@@ -188,11 +189,9 @@ class CrowdsMaster(rpyc.Service):
         global data
         data.servers.append(port)
 
-global assignedIp
 class CrowdsIpChecker(rpyc.Service):
-
+    global assignedIp
     def exposed_check_ip(self, sIp):
-        global assignedIp
         if(assignedIp==sIp):
             return True
         return False
