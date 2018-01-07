@@ -203,11 +203,12 @@ def launch_Ip_checker():
     global ipGiver
     ThreadedServer(CrowdsIpChecker,port=ipGiver.serverPort,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
-ipGiver=None
+global ipGiver
 def main():
     global data
     data = PersistentData()
 	
+    global ipGiver
     ipGiver=IPv4(data.host)
     assignedIp=ipGiver.chooseIp()
     thread.start_new_thread(launch_Ip_checker, ())
