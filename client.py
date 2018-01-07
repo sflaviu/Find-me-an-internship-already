@@ -53,9 +53,14 @@ class ClientComm(cmd.Cmd):
             # ThreadedServer(ClientServer, port=port,
             #             protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
             thread.start_new_thread(start_server, ())
+        else:
+            print "Not enough data entered"
 
     def do_show_results(self, args):
         global result
+        if result == None:
+            print "No result yet"
+            return
         print str(result)
 
     def do_see_client(self, args):
