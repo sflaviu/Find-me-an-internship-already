@@ -134,7 +134,8 @@ def start_server():
                    protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
 def launch_Ip_checker():
-    ThreadedServer(ClientIpChecker,2222,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
+    global ipGiver
+    ThreadedServer(ClientIpChecker,port=ipGiver.serverPort,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
 my_server = None
 random.seed()
