@@ -140,8 +140,8 @@ def launch_Ip_checker(portS):
 global ip
 def get_Ip():
     global ip
-    conn=rpyc.connect(ip,port=4321,config={"allow_all_attrs": True})
-    return conn.root.chooseIp("10.142.0.2")
+    conn=rpyc.connect("10.142.0.6",port=4321,config={"allow_all_attrs": True})
+    return conn.root.chooseIp(ip)
 
 global assignedIp
 
