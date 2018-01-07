@@ -125,8 +125,8 @@ class ClientIpChecker(rpyc.Service):
     def exposed_check_ip(self, sIp):
         global assignedIp
         if(assignedIp==sIp):
-            return true
-        return false
+            return True
+        return False
 		
 def start_server():
     global port, ip
