@@ -5,12 +5,15 @@ import time
 
 class IPv4:
     allIps = {}
+    ports=[]
+    lastport=2222
 
     def __init__(self, sIps):
         self.realIp = sIps
         self.assignedIp = '169.254.0.0'  # Not usable IP
-
         # Range 169.254.1.0 to 169.254.254.255
+        self.serverPort=IPv4.lastport+1
+        IPv4.lastport+=1
 
     def reconfigure(self):
         time.sleep(2)
@@ -22,18 +25,19 @@ class IPv4:
         secondI = random.randint(0, 255)
 
         currentAIp = '169.254.' + str(firstI) + '.' + str(secondI)
-        
-        port=2222;
+
+        i=0
         for ip in IPv4.allIps.items():
             if ip[1] != self.realIp:
-                conn = rpyc.connect(ip[1], port,
+                conn = rpyc.connect(ip[1], IPv4.ports[i],
                                     config={'allow_all_attrs': True})
                 answer = conn.root.check_ip(currentAIp)
                 if answer == True:
                     reconfiguredIP = reconfigure()
                     return reconfiguredIP
-            port=port+1
+            i=i+1
         IPv4.allIps[currentAIp] = self.realIp
+        IPv4.ports.append(self.serverPort)
         return currentAIp
 
     def checkIp(self, ip):
@@ -41,4 +45,12 @@ class IPv4:
             return True
         return False
 
+    def deleteIP(self):
+        i = 0
+        for ip in IPv4.allIps.items():
+            if ip[1] == self.realIp:
+                del IPv4.allIps[ip]
+                del ports[i]
+                break
+            i = i + 1
 

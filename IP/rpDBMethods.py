@@ -359,7 +359,8 @@ def server_start():
 
 
 def launch_Ip_checker():
-    ThreadedServer(DBIpChecker, port=2222,
+    global ipGiver
+    ThreadedServer(DBIpChecker, ipGiver.serverPort,
                    protocol_config={'allow_public_attrs': True,
                    'allow_all_attrs': True}).start()
 

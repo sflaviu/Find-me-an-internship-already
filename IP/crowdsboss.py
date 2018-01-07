@@ -200,7 +200,8 @@ def server_start():
                    protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
 def launch_Ip_checker():
-    ThreadedServer(CrowdsIpChecker,port=2223,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
+    global ipGiver
+    ThreadedServer(CrowdsIpChecker,ipGiver.serverPort,protocol_config={"allow_public_attrs": True, "allow_all_attrs": True}).start()
 
 
 def main():
@@ -210,6 +211,8 @@ def main():
     ipGiver=IPv4(data.host)
     assignedIp=ipGiver.chooseIp()
     thread.start_new_thread(launch_Ip_checker, ())
+
+    print "My assigned IP is "+assignedIp
 	
     thread.start_new_thread(server_start, ())
     myConsole = CrowdsConsole()
