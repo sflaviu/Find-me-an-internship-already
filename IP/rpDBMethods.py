@@ -378,7 +378,7 @@ if __name__ == '__main__':
 
     print "My assigned IP is " + assignedIp
 
-    thread.start_new_thread(launch_Ip_checker, (ip[1]))
+    thread.start_new_thread(launch_Ip_checker, (ip[1],))
     thread.start_new_thread(server_start, ())
     while 1 == 1:
         pass
