@@ -188,6 +188,7 @@ class CrowdsMaster(rpyc.Service):
         global data
         data.servers.append(port)
 
+global assignedIp
 class CrowdsIpChecker(rpyc.Service):
 
     def exposed_check_ip(self, sIp):
@@ -208,7 +209,7 @@ def get_Ip():
     conn=rpyc.connect("10.142.0.6",4321,config={"allow_all_attrs": True})
     return conn.root.chooseIp("10.142.0.3")
 
-global assignedIp
+
 def main():
     global data
     data = PersistentData()
