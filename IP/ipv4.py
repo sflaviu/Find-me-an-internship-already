@@ -33,7 +33,7 @@ class IPv4(rpyc.Service):
             if ip[1] != rIp:
                 print ip[1] 
                 print ni.ports[i]
-                conn = rpyc.connect(ip[1], ni.ports[i],config={'allow_all_attrs': True})
+                conn = rpyc.connect(ip[1], 5555,config={'allow_all_attrs': True})
                 answer = conn.root.check_ip(currentAIp)
                 if answer == True:
                     reconfiguredIP = reconfigure()
