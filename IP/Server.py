@@ -80,9 +80,17 @@ class MiddleServer(rpyc.Service):
                         match = match + 3
                 if match > bestMatch:
                     bestMatch = match
-                    internship = str(i)
+                    internship = i
+            company = db.getCompanyName(internship.company)
+            language= db.getLanguageName(internship.language)
+            location = db.getLocationName(internship.location)
+            internshipString = "Internship at " + company + "\n" \
+                                + "Location: " + location + "\n" \
+                                + "Language: " + language + "\n" \
+                                + "Experience: " + str(internship.experience) + "\n" \
+                                + "Duration: " + str(internship.duration)
             connection.close()
-            return internship
+            return internshipString
 
     #only for testing reasons
     def sayHello(self):
